@@ -9,11 +9,26 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/dotnet/sdk:8.0
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+      options: -w /app
+      volumes:
+        - ${{ github.workspace }}:/app
+
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build in Container
+        run: |
+          dotnet restore
+          dotnet test
+          dotnet publish -o out
+
+
+
     # - name: Setup .NET
     #   uses: actions/setup-dotnet@v4
     #   with:
