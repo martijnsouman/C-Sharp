@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/dotnet/sdk:8.0
-      options: -w /app
+      options: -w /banaan
       volumes:
-        - ${{ github.workspace }}:/app
+        - ${{ github.workspace }}:/banaan
 
     steps:
       - name: Checkout
@@ -21,11 +21,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Show files
+        run: ls
+        working-directory: /banaan
+
       - name: Build in Container
         run: |
           dotnet restore
           dotnet test
           dotnet publish -o out
+        working-directory: /banaan
 
 
 
